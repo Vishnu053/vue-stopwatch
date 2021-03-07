@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Count</title>
+    <link rel="icon" href="./favicon.ico" sizes="32x32" type="image/png">
+    <script src="https://unpkg.com/vue@next"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <style>
+        body {
+            background: radial-gradient(#0d0d0d, #272727);
+        }
+
+        .rounded-btn {
+
+            border-radius: 50%;
+            height: 80px;
+            width: 82px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="timer" class="mt-2">
+
+        <div class="row col-12 mx-0 justify-content-center">
+            <div class="d-flex justify-content-center position-fixed" style="top:42%">
+                <div class="h1 text-primary" style="font-size: 5rem;">{{appendSeconds}}</div>
+                <div class="h2 text-warning">{{appendTens}}</div>
+            </div>
+
+            <div class="d-flex justify-content-around position-fixed" style="bottom: 3vh;">
+                <button class="btn btn-outline-danger rounded-btn d-none" @click="countReset" id="c-reset">Reset</button>
+                <button class="btn btn-outline-warning rounded-btn d-none" @click="countStop" id="c-stop">Pause</button>
+                <button class="btn btn-outline-primary rounded-btn" @click="countStart" id="c-start">Start</button>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <script>
+        const TimerApp = {
+            data() {
+                return {
+                    seconds: 00,
+                    tens: 00,
+                    appendTens: 00,
+                    appendSeconds: 00,
+                    Interval: 1000,
+                }
+            },
+            methods: {
+
+                countStart() {
+                    clearInterval();
+                    this.Interval = setInterval(this.startTimer, 10);
+                    document.getElementById('c-start').classList.add('d-none')
+                    document.getElementById('c-stop').classList.remove('d-none')
+                    document.getElementById('c-reset').classList.remove('d-none')
+                },
+                countStop() {
+                    clearInterval(this.Interval);
+                    document.getElementById('c-start').classList.remove('d-none')
+                    document.getElementById('c-stop').classList.add('d-none')
+                    document.getElementById('c-reset').classList.remove('d-none')
+                },
+                countReset() {
+                    clearInterval(this.Interval);
+                    this.tens = "00";
+                    this.seconds = "00";
+                    this.appendTens = this.tens;
+                    this.appendSeconds = this.seconds;
+                    document.getElementById('c-start').classList.remove('d-none')
+                    document.getElementById('c-stop').classList.add('d-none')
+                    document.getElementById('c-reset').classList.add('d-none')
+                },
+                startTimer() {
+                    this.tens++;
+
+                    if (this.tens < 9) {
+                        this.appendTens = "0" + this.tens;
+                    }
+
+                    if (this.tens > 9) {
+                        this.appendTens = this.tens;
+
+                    }
+
+                    if (this.tens > 99) {
+                        console.log("seconds");
+                        this.seconds++;
+                        this.appendSeconds = "0" + this.seconds;
+                        this.tens = 00;
+                        this.appendTens = "0" + 0;
+                    }
+
+                    if (this.seconds > 9) {
+                        this.appendSeconds = this.seconds;
+                    }
+
+                }
+
+
+            }
+        }
+
+        Vue.createApp(TimerApp).mount('#timer')
+    </script>
+
+</body>
+
+</html>
